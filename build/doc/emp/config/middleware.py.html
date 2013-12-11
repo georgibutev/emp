@@ -1,0 +1,139 @@
+<html><head><title>C:\Users\Georgi\pylons\projects\emp\emp\config\middleware.py</title>
+        <script type="text/javascript"><!--
+        
+function show_line_range() {
+    var href = document.location.href;
+    if (href.indexOf('?') == -1) {
+        return;
+    }
+    var qs = href.substring(href.indexOf('?')+1);
+    if (qs.indexOf('#') >= 0) {
+        qs = qs.substring(0, qs.indexOf('#'));
+    }
+    var first = qs.match(/f=(\d+)/)[1];
+    var last = qs.match(/l=(\d+)/)[1];
+    if (! first || ! last) {
+        return;
+    }
+    var anchors = document.getElementsByTagName('A');
+    var container = document.createElement('DIV');
+    container.className = 'highlighted';
+    var children = [];
+    var start = null;
+    var parent = null;
+    var highlight = false;
+    for (var i = 0; i < anchors.length; i++) {
+        var el = anchors[i];
+        if (el.getAttribute('name') == first) {
+            start = el.previousSibling;
+            parent = el.parentNode;
+            highlight = true;
+        }
+        if (el.getAttribute('name') == last) {
+            break;
+        }
+        if (highlight) {
+            children[children.length] = el;
+            el = el.nextSibling;
+            while (el && el.tagName != 'A') {
+                children[children.length] = el;
+                el = el.nextSibling;
+            }
+        }
+    }
+    for (i=0; i<children.length; i++) {
+        container.appendChild(children[i]);
+    }
+    if (start) {
+        start.parentNode.insertBefore(container, start.nextSibling);
+    } else {
+        parent.insertBefore(container, parent.childNodes[0]);
+    }
+}
+
+        // --></script>
+        <style>
+        div.python {
+          color: #333
+        }
+        div.python a.lnum {
+          color: #555;
+          background-color: #eee;
+          border-right: 1px solid #999;
+          padding-right: 2px;
+          margin-right: 4px;
+        }
+        div.python span.comment { color: #933 }
+        div.python span.keyword { color: #a3e; font-weight: bold  }
+        div.python span.op { color: #c96 }
+        div.python span.string { color: #6a6 }
+        div.python span.name { }
+        div.python span.text { color: #333 }
+        div.highlighted { background-color: #ff9; border: 1px solid #009 }
+        </style></head><body onload="show_line_range()"><div class="python"><code><a class="lnum" href="#1" name="1">0001</a><span class="string">"""Pylons&#0160;middleware&#0160;initialization"""</span><br />
+<a class="lnum" href="#2" name="2">0002</a><span class="keyword">from</span>&#0160;<span class="name">beaker</span><span class="op">.</span><span class="name">middleware</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">SessionMiddleware</span><br />
+<a class="lnum" href="#3" name="3">0003</a><span class="keyword">from</span>&#0160;<span class="name">paste</span><span class="op">.</span><span class="name">cascade</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">Cascade</span><br />
+<a class="lnum" href="#4" name="4">0004</a><span class="keyword">from</span>&#0160;<span class="name">paste</span><span class="op">.</span><span class="name">registry</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">RegistryManager</span><br />
+<a class="lnum" href="#5" name="5">0005</a><span class="keyword">from</span>&#0160;<span class="name">paste</span><span class="op">.</span><span class="name">urlparser</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">StaticURLParser</span><br />
+<a class="lnum" href="#6" name="6">0006</a><span class="keyword">from</span>&#0160;<span class="name">paste</span><span class="op">.</span><span class="name">deploy</span><span class="op">.</span><span class="name">converters</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">asbool</span><br />
+<a class="lnum" href="#7" name="7">0007</a><span class="keyword">from</span>&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">middleware</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">ErrorHandler</span><span class="op">,</span>&#0160;<span class="name">StatusCodeRedirect</span><br />
+<a class="lnum" href="#8" name="8">0008</a><span class="keyword">from</span>&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">wsgiapp</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">PylonsApp</span><br />
+<a class="lnum" href="#9" name="9">0009</a><span class="keyword">from</span>&#0160;<span class="name">routes</span><span class="op">.</span><span class="name">middleware</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">RoutesMiddleware</span><br />
+<a class="lnum" href="#10" name="10">0010</a><br />
+<a class="lnum" href="#11" name="11">0011</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">config</span><span class="op">.</span><span class="name">environment</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">load_environment</span><br />
+<a class="lnum" href="#12" name="12">0012</a><br />
+<a class="lnum" href="#13" name="13">0013</a><span class="keyword">def</span>&#0160;<span class="name">make_app</span><span class="op">(</span><span class="name">global_conf</span><span class="op">,</span>&#0160;<span class="name">full_stack</span><span class="op">=</span><span class="name">True</span><span class="op">,</span>&#0160;<span class="name">static_files</span><span class="op">=</span><span class="name">True</span><span class="op">,</span>&#0160;<span class="op">**</span><span class="name">app_conf</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#14" name="14">0014</a>&#0160;&#0160;&#0160;&#0160;<span class="string">"""Create&#0160;a&#0160;Pylons&#0160;WSGI&#0160;application&#0160;and&#0160;return&#0160;it</span><br />
+<a class="lnum" href="#15" name="15">0015</a><span class="string"></span><br />
+<a class="lnum" href="#16" name="16">0016</a><span class="string">&#0160;&#0160;&#0160;&#0160;``global_conf``</span><br />
+<a class="lnum" href="#17" name="17">0017</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;The&#0160;inherited&#0160;configuration&#0160;for&#0160;this&#0160;application.&#0160;Normally&#0160;from</span><br />
+<a class="lnum" href="#18" name="18">0018</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;the&#0160;[DEFAULT]&#0160;section&#0160;of&#0160;the&#0160;Paste&#0160;ini&#0160;file.</span><br />
+<a class="lnum" href="#19" name="19">0019</a><span class="string"></span><br />
+<a class="lnum" href="#20" name="20">0020</a><span class="string">&#0160;&#0160;&#0160;&#0160;``full_stack``</span><br />
+<a class="lnum" href="#21" name="21">0021</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;Whether&#0160;this&#0160;application&#0160;provides&#0160;a&#0160;full&#0160;WSGI&#0160;stack&#0160;(by&#0160;default,</span><br />
+<a class="lnum" href="#22" name="22">0022</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;meaning&#0160;it&#0160;handles&#0160;its&#0160;own&#0160;exceptions&#0160;and&#0160;errors).&#0160;Disable</span><br />
+<a class="lnum" href="#23" name="23">0023</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;full_stack&#0160;when&#0160;this&#0160;application&#0160;is&#0160;"managed"&#0160;by&#0160;another&#0160;WSGI</span><br />
+<a class="lnum" href="#24" name="24">0024</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;middleware.</span><br />
+<a class="lnum" href="#25" name="25">0025</a><span class="string"></span><br />
+<a class="lnum" href="#26" name="26">0026</a><span class="string">&#0160;&#0160;&#0160;&#0160;``static_files``</span><br />
+<a class="lnum" href="#27" name="27">0027</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;Whether&#0160;this&#0160;application&#0160;serves&#0160;its&#0160;own&#0160;static&#0160;files;&#0160;disable</span><br />
+<a class="lnum" href="#28" name="28">0028</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;when&#0160;another&#0160;web&#0160;server&#0160;is&#0160;responsible&#0160;for&#0160;serving&#0160;them.</span><br />
+<a class="lnum" href="#29" name="29">0029</a><span class="string"></span><br />
+<a class="lnum" href="#30" name="30">0030</a><span class="string">&#0160;&#0160;&#0160;&#0160;``app_conf``</span><br />
+<a class="lnum" href="#31" name="31">0031</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;The&#0160;application's&#0160;local&#0160;configuration.&#0160;Normally&#0160;specified&#0160;in</span><br />
+<a class="lnum" href="#32" name="32">0032</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;the&#0160;[app:&lt;name&gt;]&#0160;section&#0160;of&#0160;the&#0160;Paste&#0160;ini&#0160;file&#0160;(where&#0160;&lt;name&gt;</span><br />
+<a class="lnum" href="#33" name="33">0033</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;defaults&#0160;to&#0160;main).</span><br />
+<a class="lnum" href="#34" name="34">0034</a><span class="string"></span><br />
+<a class="lnum" href="#35" name="35">0035</a><span class="string">&#0160;&#0160;&#0160;&#0160;"""</span><br />
+<a class="lnum" href="#36" name="36">0036</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Configure&#0160;the&#0160;Pylons&#0160;environment</span><br />
+<a class="lnum" href="#37" name="37">0037</a>&#0160;&#0160;&#0160;&#0160;<span class="name">config</span>&#0160;<span class="op">=</span>&#0160;<span class="name">load_environment</span><span class="op">(</span><span class="name">global_conf</span><span class="op">,</span>&#0160;<span class="name">app_conf</span><span class="op">)</span><br />
+<a class="lnum" href="#38" name="38">0038</a><br />
+<a class="lnum" href="#39" name="39">0039</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;The&#0160;Pylons&#0160;WSGI&#0160;app</span><br />
+<a class="lnum" href="#40" name="40">0040</a>&#0160;&#0160;&#0160;&#0160;<span class="name">app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">PylonsApp</span><span class="op">(</span><span class="name">config</span><span class="op">=</span><span class="name">config</span><span class="op">)</span><br />
+<a class="lnum" href="#41" name="41">0041</a><br />
+<a class="lnum" href="#42" name="42">0042</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Routing/Session&#0160;Middleware</span><br />
+<a class="lnum" href="#43" name="43">0043</a>&#0160;&#0160;&#0160;&#0160;<span class="name">app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">RoutesMiddleware</span><span class="op">(</span><span class="name">app</span><span class="op">,</span>&#0160;<span class="name">config</span><span class="op">[</span><span class="string">'routes.map'</span><span class="op">]</span><span class="op">,</span>&#0160;<span class="name">singleton</span><span class="op">=</span><span class="name">False</span><span class="op">)</span><br />
+<a class="lnum" href="#44" name="44">0044</a>&#0160;&#0160;&#0160;&#0160;<span class="name">app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">SessionMiddleware</span><span class="op">(</span><span class="name">app</span><span class="op">,</span>&#0160;<span class="name">config</span><span class="op">)</span><br />
+<a class="lnum" href="#45" name="45">0045</a><br />
+<a class="lnum" href="#46" name="46">0046</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;CUSTOM&#0160;MIDDLEWARE&#0160;HERE&#0160;(filtered&#0160;by&#0160;error&#0160;handling&#0160;middlewares)</span><br />
+<a class="lnum" href="#47" name="47">0047</a><br />
+<a class="lnum" href="#48" name="48">0048</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">if</span>&#0160;<span class="name">asbool</span><span class="op">(</span><span class="name">full_stack</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#49" name="49">0049</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Handle&#0160;Python&#0160;exceptions</span><br />
+<a class="lnum" href="#50" name="50">0050</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">ErrorHandler</span><span class="op">(</span><span class="name">app</span><span class="op">,</span>&#0160;<span class="name">global_conf</span><span class="op">,</span>&#0160;<span class="op">**</span><span class="name">config</span><span class="op">[</span><span class="string">'pylons.errorware'</span><span class="op">]</span><span class="op">)</span><br />
+<a class="lnum" href="#51" name="51">0051</a><br />
+<a class="lnum" href="#52" name="52">0052</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Display&#0160;error&#0160;documents&#0160;for&#0160;401,&#0160;403,&#0160;404&#0160;status&#0160;codes&#0160;(and</span><br />
+<a class="lnum" href="#53" name="53">0053</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;500&#0160;when&#0160;debug&#0160;is&#0160;disabled)</span><br />
+<a class="lnum" href="#54" name="54">0054</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="keyword">if</span>&#0160;<span class="name">asbool</span><span class="op">(</span><span class="name">config</span><span class="op">[</span><span class="string">'debug'</span><span class="op">]</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#55" name="55">0055</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">StatusCodeRedirect</span><span class="op">(</span><span class="name">app</span><span class="op">)</span><br />
+<a class="lnum" href="#56" name="56">0056</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="keyword">else</span><span class="op">:</span><br />
+<a class="lnum" href="#57" name="57">0057</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">StatusCodeRedirect</span><span class="op">(</span><span class="name">app</span><span class="op">,</span>&#0160;<span class="op">[</span><span class="number">400</span><span class="op">,</span>&#0160;<span class="number">401</span><span class="op">,</span>&#0160;<span class="number">403</span><span class="op">,</span>&#0160;<span class="number">404</span><span class="op">,</span>&#0160;<span class="number">500</span><span class="op">]</span><span class="op">)</span><br />
+<a class="lnum" href="#58" name="58">0058</a><br />
+<a class="lnum" href="#59" name="59">0059</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Establish&#0160;the&#0160;Registry&#0160;for&#0160;this&#0160;application</span><br />
+<a class="lnum" href="#60" name="60">0060</a>&#0160;&#0160;&#0160;&#0160;<span class="name">app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">RegistryManager</span><span class="op">(</span><span class="name">app</span><span class="op">)</span><br />
+<a class="lnum" href="#61" name="61">0061</a><br />
+<a class="lnum" href="#62" name="62">0062</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">if</span>&#0160;<span class="name">asbool</span><span class="op">(</span><span class="name">static_files</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#63" name="63">0063</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Serve&#0160;static&#0160;files</span><br />
+<a class="lnum" href="#64" name="64">0064</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">static_app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">StaticURLParser</span><span class="op">(</span><span class="name">config</span><span class="op">[</span><span class="string">'pylons.paths'</span><span class="op">]</span><span class="op">[</span><span class="string">'static_files'</span><span class="op">]</span><span class="op">)</span><br />
+<a class="lnum" href="#65" name="65">0065</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">Cascade</span><span class="op">(</span><span class="op">[</span><span class="name">static_app</span><span class="op">,</span>&#0160;<span class="name">app</span><span class="op">]</span><span class="op">)</span><br />
+<a class="lnum" href="#66" name="66">0066</a>&#0160;&#0160;&#0160;&#0160;<span class="name">app</span><span class="op">.</span><span class="name">config</span>&#0160;<span class="op">=</span>&#0160;<span class="name">config</span><br />
+<a class="lnum" href="#67" name="67">0067</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">return</span>&#0160;<span class="name">app</span></code></div></body></html>

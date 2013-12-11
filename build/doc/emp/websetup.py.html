@@ -1,0 +1,88 @@
+<html><head><title>C:\Users\Georgi\pylons\projects\emp\emp\websetup.py</title>
+        <script type="text/javascript"><!--
+        
+function show_line_range() {
+    var href = document.location.href;
+    if (href.indexOf('?') == -1) {
+        return;
+    }
+    var qs = href.substring(href.indexOf('?')+1);
+    if (qs.indexOf('#') >= 0) {
+        qs = qs.substring(0, qs.indexOf('#'));
+    }
+    var first = qs.match(/f=(\d+)/)[1];
+    var last = qs.match(/l=(\d+)/)[1];
+    if (! first || ! last) {
+        return;
+    }
+    var anchors = document.getElementsByTagName('A');
+    var container = document.createElement('DIV');
+    container.className = 'highlighted';
+    var children = [];
+    var start = null;
+    var parent = null;
+    var highlight = false;
+    for (var i = 0; i < anchors.length; i++) {
+        var el = anchors[i];
+        if (el.getAttribute('name') == first) {
+            start = el.previousSibling;
+            parent = el.parentNode;
+            highlight = true;
+        }
+        if (el.getAttribute('name') == last) {
+            break;
+        }
+        if (highlight) {
+            children[children.length] = el;
+            el = el.nextSibling;
+            while (el && el.tagName != 'A') {
+                children[children.length] = el;
+                el = el.nextSibling;
+            }
+        }
+    }
+    for (i=0; i<children.length; i++) {
+        container.appendChild(children[i]);
+    }
+    if (start) {
+        start.parentNode.insertBefore(container, start.nextSibling);
+    } else {
+        parent.insertBefore(container, parent.childNodes[0]);
+    }
+}
+
+        // --></script>
+        <style>
+        div.python {
+          color: #333
+        }
+        div.python a.lnum {
+          color: #555;
+          background-color: #eee;
+          border-right: 1px solid #999;
+          padding-right: 2px;
+          margin-right: 4px;
+        }
+        div.python span.comment { color: #933 }
+        div.python span.keyword { color: #a3e; font-weight: bold  }
+        div.python span.op { color: #c96 }
+        div.python span.string { color: #6a6 }
+        div.python span.name { }
+        div.python span.text { color: #333 }
+        div.highlighted { background-color: #ff9; border: 1px solid #009 }
+        </style></head><body onload="show_line_range()"><div class="python"><code><a class="lnum" href="#1" name="1">0001</a><span class="string">"""Setup&#0160;the&#0160;emp&#0160;application"""</span><br />
+<a class="lnum" href="#2" name="2">0002</a><span class="keyword">import</span>&#0160;<span class="name">logging</span><br />
+<a class="lnum" href="#3" name="3">0003</a><br />
+<a class="lnum" href="#4" name="4">0004</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">config</span><span class="op">.</span><span class="name">environment</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">load_environment</span><br />
+<a class="lnum" href="#5" name="5">0005</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">model</span><span class="op">.</span><span class="name">meta</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">Session</span><span class="op">,</span>&#0160;<span class="name">Base</span><br />
+<a class="lnum" href="#6" name="6">0006</a><br />
+<a class="lnum" href="#7" name="7">0007</a><span class="name">log</span>&#0160;<span class="op">=</span>&#0160;<span class="name">logging</span><span class="op">.</span><span class="name">getLogger</span><span class="op">(</span><span class="name">__name__</span><span class="op">)</span><br />
+<a class="lnum" href="#8" name="8">0008</a><br />
+<a class="lnum" href="#9" name="9">0009</a><span class="keyword">def</span>&#0160;<span class="name">setup_app</span><span class="op">(</span><span class="name">command</span><span class="op">,</span>&#0160;<span class="name">conf</span><span class="op">,</span>&#0160;<span class="name">vars</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#10" name="10">0010</a>&#0160;&#0160;&#0160;&#0160;<span class="string">"""Place&#0160;any&#0160;commands&#0160;to&#0160;setup&#0160;emp&#0160;here"""</span><br />
+<a class="lnum" href="#11" name="11">0011</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Don't&#0160;reload&#0160;the&#0160;app&#0160;if&#0160;it&#0160;was&#0160;loaded&#0160;under&#0160;the&#0160;testing&#0160;environment</span><br />
+<a class="lnum" href="#12" name="12">0012</a>&#0160;&#0160;&#0160;&#0160;<span class="name">load_environment</span><span class="op">(</span><span class="name">conf</span><span class="op">.</span><span class="name">global_conf</span><span class="op">,</span>&#0160;<span class="name">conf</span><span class="op">.</span><span class="name">local_conf</span><span class="op">)</span><br />
+<a class="lnum" href="#13" name="13">0013</a><br />
+<a class="lnum" href="#14" name="14">0014</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Create&#0160;the&#0160;tables&#0160;if&#0160;they&#0160;don't&#0160;already&#0160;exist</span><br />
+<a class="lnum" href="#15" name="15">0015</a>&#0160;&#0160;&#0160;&#0160;<span class="name">Base</span><span class="op">.</span><span class="name">metadata</span><span class="op">.</span><span class="name">drop_all</span><span class="op">(</span><span class="name">checkfirst</span><span class="op">=</span><span class="name">True</span><span class="op">,</span>&#0160;<span class="name">bind</span><span class="op">=</span><span class="name">Session</span><span class="op">.</span><span class="name">bind</span><span class="op">)</span><br />
+<a class="lnum" href="#16" name="16">0016</a>&#0160;&#0160;&#0160;&#0160;<span class="name">Base</span><span class="op">.</span><span class="name">metadata</span><span class="op">.</span><span class="name">create_all</span><span class="op">(</span><span class="name">bind</span><span class="op">=</span><span class="name">Session</span><span class="op">.</span><span class="name">bind</span><span class="op">)</span></code></div></body></html>

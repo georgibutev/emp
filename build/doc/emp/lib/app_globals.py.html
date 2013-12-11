@@ -1,0 +1,90 @@
+<html><head><title>C:\Users\Georgi\pylons\projects\emp\emp\lib\app_globals.py</title>
+        <script type="text/javascript"><!--
+        
+function show_line_range() {
+    var href = document.location.href;
+    if (href.indexOf('?') == -1) {
+        return;
+    }
+    var qs = href.substring(href.indexOf('?')+1);
+    if (qs.indexOf('#') >= 0) {
+        qs = qs.substring(0, qs.indexOf('#'));
+    }
+    var first = qs.match(/f=(\d+)/)[1];
+    var last = qs.match(/l=(\d+)/)[1];
+    if (! first || ! last) {
+        return;
+    }
+    var anchors = document.getElementsByTagName('A');
+    var container = document.createElement('DIV');
+    container.className = 'highlighted';
+    var children = [];
+    var start = null;
+    var parent = null;
+    var highlight = false;
+    for (var i = 0; i < anchors.length; i++) {
+        var el = anchors[i];
+        if (el.getAttribute('name') == first) {
+            start = el.previousSibling;
+            parent = el.parentNode;
+            highlight = true;
+        }
+        if (el.getAttribute('name') == last) {
+            break;
+        }
+        if (highlight) {
+            children[children.length] = el;
+            el = el.nextSibling;
+            while (el && el.tagName != 'A') {
+                children[children.length] = el;
+                el = el.nextSibling;
+            }
+        }
+    }
+    for (i=0; i<children.length; i++) {
+        container.appendChild(children[i]);
+    }
+    if (start) {
+        start.parentNode.insertBefore(container, start.nextSibling);
+    } else {
+        parent.insertBefore(container, parent.childNodes[0]);
+    }
+}
+
+        // --></script>
+        <style>
+        div.python {
+          color: #333
+        }
+        div.python a.lnum {
+          color: #555;
+          background-color: #eee;
+          border-right: 1px solid #999;
+          padding-right: 2px;
+          margin-right: 4px;
+        }
+        div.python span.comment { color: #933 }
+        div.python span.keyword { color: #a3e; font-weight: bold  }
+        div.python span.op { color: #c96 }
+        div.python span.string { color: #6a6 }
+        div.python span.name { }
+        div.python span.text { color: #333 }
+        div.highlighted { background-color: #ff9; border: 1px solid #009 }
+        </style></head><body onload="show_line_range()"><div class="python"><code><a class="lnum" href="#1" name="1">0001</a><span class="string">"""The&#0160;application's&#0160;Globals&#0160;object"""</span><br />
+<a class="lnum" href="#2" name="2">0002</a><br />
+<a class="lnum" href="#3" name="3">0003</a><span class="keyword">from</span>&#0160;<span class="name">beaker</span><span class="op">.</span><span class="name">cache</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">CacheManager</span><br />
+<a class="lnum" href="#4" name="4">0004</a><span class="keyword">from</span>&#0160;<span class="name">beaker</span><span class="op">.</span><span class="name">util</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">parse_cache_config_options</span><br />
+<a class="lnum" href="#5" name="5">0005</a><br />
+<a class="lnum" href="#6" name="6">0006</a><span class="keyword">class</span>&#0160;<span class="name">Globals</span><span class="op">(</span><span class="name">object</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#7" name="7">0007</a>&#0160;&#0160;&#0160;&#0160;<span class="string">"""Globals&#0160;acts&#0160;as&#0160;a&#0160;container&#0160;for&#0160;objects&#0160;available&#0160;throughout&#0160;the</span><br />
+<a class="lnum" href="#8" name="8">0008</a><span class="string">&#0160;&#0160;&#0160;&#0160;life&#0160;of&#0160;the&#0160;application</span><br />
+<a class="lnum" href="#9" name="9">0009</a><span class="string"></span><br />
+<a class="lnum" href="#10" name="10">0010</a><span class="string">&#0160;&#0160;&#0160;&#0160;"""</span><br />
+<a class="lnum" href="#11" name="11">0011</a><br />
+<a class="lnum" href="#12" name="12">0012</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">def</span>&#0160;<span class="name">__init__</span><span class="op">(</span><span class="name">self</span><span class="op">,</span>&#0160;<span class="name">config</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#13" name="13">0013</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="string">"""One&#0160;instance&#0160;of&#0160;Globals&#0160;is&#0160;created&#0160;during&#0160;application</span><br />
+<a class="lnum" href="#14" name="14">0014</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;initialization&#0160;and&#0160;is&#0160;available&#0160;during&#0160;requests&#0160;via&#0160;the</span><br />
+<a class="lnum" href="#15" name="15">0015</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;'app_globals'&#0160;variable</span><br />
+<a class="lnum" href="#16" name="16">0016</a><span class="string"></span><br />
+<a class="lnum" href="#17" name="17">0017</a><span class="string">&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;"""</span><br />
+<a class="lnum" href="#18" name="18">0018</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">self</span><span class="op">.</span><span class="name">cache</span>&#0160;<span class="op">=</span>&#0160;<span class="name">CacheManager</span><span class="op">(</span><span class="op">**</span><span class="name">parse_cache_config_options</span><span class="op">(</span><span class="name">config</span><span class="op">)</span><span class="op">)</span></code></div></body></html>

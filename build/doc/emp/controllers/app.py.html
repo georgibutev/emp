@@ -1,0 +1,169 @@
+<html><head><title>C:\Users\Georgi\pylons\projects\emp\emp\controllers\app.py</title>
+        <script type="text/javascript"><!--
+        
+function show_line_range() {
+    var href = document.location.href;
+    if (href.indexOf('?') == -1) {
+        return;
+    }
+    var qs = href.substring(href.indexOf('?')+1);
+    if (qs.indexOf('#') >= 0) {
+        qs = qs.substring(0, qs.indexOf('#'));
+    }
+    var first = qs.match(/f=(\d+)/)[1];
+    var last = qs.match(/l=(\d+)/)[1];
+    if (! first || ! last) {
+        return;
+    }
+    var anchors = document.getElementsByTagName('A');
+    var container = document.createElement('DIV');
+    container.className = 'highlighted';
+    var children = [];
+    var start = null;
+    var parent = null;
+    var highlight = false;
+    for (var i = 0; i < anchors.length; i++) {
+        var el = anchors[i];
+        if (el.getAttribute('name') == first) {
+            start = el.previousSibling;
+            parent = el.parentNode;
+            highlight = true;
+        }
+        if (el.getAttribute('name') == last) {
+            break;
+        }
+        if (highlight) {
+            children[children.length] = el;
+            el = el.nextSibling;
+            while (el && el.tagName != 'A') {
+                children[children.length] = el;
+                el = el.nextSibling;
+            }
+        }
+    }
+    for (i=0; i<children.length; i++) {
+        container.appendChild(children[i]);
+    }
+    if (start) {
+        start.parentNode.insertBefore(container, start.nextSibling);
+    } else {
+        parent.insertBefore(container, parent.childNodes[0]);
+    }
+}
+
+        // --></script>
+        <style>
+        div.python {
+          color: #333
+        }
+        div.python a.lnum {
+          color: #555;
+          background-color: #eee;
+          border-right: 1px solid #999;
+          padding-right: 2px;
+          margin-right: 4px;
+        }
+        div.python span.comment { color: #933 }
+        div.python span.keyword { color: #a3e; font-weight: bold  }
+        div.python span.op { color: #c96 }
+        div.python span.string { color: #6a6 }
+        div.python span.name { }
+        div.python span.text { color: #333 }
+        div.highlighted { background-color: #ff9; border: 1px solid #009 }
+        </style></head><body onload="show_line_range()"><div class="python"><code><a class="lnum" href="#1" name="1">0001</a><span class="keyword">import</span>&#0160;<span class="name">logging</span><br />
+<a class="lnum" href="#2" name="2">0002</a><br />
+<a class="lnum" href="#3" name="3">0003</a><span class="keyword">from</span>&#0160;<span class="name">pylons</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">request</span><span class="op">,</span>&#0160;<span class="name">response</span><span class="op">,</span>&#0160;<span class="name">session</span><span class="op">,</span>&#0160;<span class="name">tmpl_context</span>&#0160;<span class="keyword">as</span>&#0160;<span class="name">c</span><span class="op">,</span>&#0160;<span class="name">url</span><br />
+<a class="lnum" href="#4" name="4">0004</a><span class="keyword">from</span>&#0160;<span class="name">pylons</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">config</span><br />
+<a class="lnum" href="#5" name="5">0005</a><span class="keyword">from</span>&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">controllers</span><span class="op">.</span><span class="name">util</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">abort</span><span class="op">,</span>&#0160;<span class="name">redirect</span><br />
+<a class="lnum" href="#6" name="6">0006</a><br />
+<a class="lnum" href="#7" name="7">0007</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">lib</span><span class="op">.</span><span class="name">base</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">BaseController</span><span class="op">,</span>&#0160;<span class="name">render</span><span class="op">,</span>&#0160;<span class="name">validate</span><br />
+<a class="lnum" href="#8" name="8">0008</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">lib</span><span class="op">.</span><span class="name">base</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">Session</span><br />
+<a class="lnum" href="#9" name="9">0009</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">model</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">User</span><br />
+<a class="lnum" href="#10" name="10">0010</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">model</span><span class="op">.</span><span class="name">form</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">UserForm</span><br />
+<a class="lnum" href="#11" name="11">0011</a><br />
+<a class="lnum" href="#12" name="12">0012</a><span class="name">log</span>&#0160;<span class="op">=</span>&#0160;<span class="name">logging</span><span class="op">.</span><span class="name">getLogger</span><span class="op">(</span><span class="name">__name__</span><span class="op">)</span><br />
+<a class="lnum" href="#13" name="13">0013</a><br />
+<a class="lnum" href="#14" name="14">0014</a><span class="keyword">class</span>&#0160;<span class="name">AppController</span><span class="op">(</span><span class="name">BaseController</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#15" name="15">0015</a><br />
+<a class="lnum" href="#16" name="16">0016</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">def</span>&#0160;<span class="name">index</span><span class="op">(</span><span class="name">self</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#17" name="17">0017</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="keyword">pass</span><br />
+<a class="lnum" href="#18" name="18">0018</a><br />
+<a class="lnum" href="#19" name="19">0019</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">def</span>&#0160;<span class="name">__before__</span><span class="op">(</span><span class="name">self</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#20" name="20">0020</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Initialize&#0160;session&#0160;for&#0160;the&#0160;database</span><br />
+<a class="lnum" href="#21" name="21">0021</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">self</span><span class="op">.</span><span class="name">query</span>&#0160;<span class="op">=</span>&#0160;<span class="name">Session</span><span class="op">.</span><span class="name">query</span><span class="op">(</span><span class="name">User</span><span class="op">)</span><br />
+<a class="lnum" href="#22" name="22">0022</a><br />
+<a class="lnum" href="#23" name="23">0023</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">def</span>&#0160;<span class="name">main</span><span class="op">(</span><span class="name">self</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#24" name="24">0024</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Render&#0160;main&#0160;page&#0160;template</span><br />
+<a class="lnum" href="#25" name="25">0025</a><br />
+<a class="lnum" href="#26" name="26">0026</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Link&#0160;for&#0160;action</span><br />
+<a class="lnum" href="#27" name="27">0027</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">c</span><span class="op">.</span><span class="name">addUserAction</span>&#0160;<span class="op">=</span>&#0160;<span class="name">url</span><span class="op">(</span><span class="name">controller</span><span class="op">=</span><span class="string">'app'</span><span class="op">,</span>&#0160;<span class="name">action</span><span class="op">=</span><span class="string">'addSingle'</span><span class="op">)</span><br />
+<a class="lnum" href="#28" name="28">0028</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="keyword">return</span>&#0160;<span class="name">render</span><span class="op">(</span><span class="string">'/main.mako'</span><span class="op">)</span><br />
+<a class="lnum" href="#29" name="29">0029</a><br />
+<a class="lnum" href="#30" name="30">0030</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Validate&#0160;the&#0160;user&#0160;submitted&#0160;form</span><br />
+<a class="lnum" href="#31" name="31">0031</a>&#0160;&#0160;&#0160;&#0160;<span class="op">@</span><span class="name">validate</span><span class="op">(</span><span class="name">schema</span><span class="op">=</span><span class="name">UserForm</span><span class="op">(</span><span class="op">)</span><span class="op">,</span>&#0160;<span class="name">form</span><span class="op">=</span><span class="string">'main'</span><span class="op">)</span><br />
+<a class="lnum" href="#32" name="32">0032</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">def</span>&#0160;<span class="name">addSingle</span><span class="op">(</span><span class="name">self</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#33" name="33">0033</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Add&#0160;single&#0160;user&#0160;to&#0160;the&#0160;database</span><br />
+<a class="lnum" href="#34" name="34">0034</a><br />
+<a class="lnum" href="#35" name="35">0035</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Link&#0160;for&#0160;action</span><br />
+<a class="lnum" href="#36" name="36">0036</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">c</span><span class="op">.</span><span class="name">addUserAction</span>&#0160;<span class="op">=</span>&#0160;<span class="name">url</span><span class="op">(</span><span class="name">controller</span><span class="op">=</span><span class="string">'app'</span><span class="op">,</span>&#0160;<span class="name">action</span><span class="op">=</span><span class="string">'addSingle'</span><span class="op">)</span><br />
+<a class="lnum" href="#37" name="37">0037</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Get&#0160;user&#0160;submitted&#0160;values</span><br />
+<a class="lnum" href="#38" name="38">0038</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">name</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'name'</span><span class="op">]</span><br />
+<a class="lnum" href="#39" name="39">0039</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">email</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'email'</span><span class="op">]</span><br />
+<a class="lnum" href="#40" name="40">0040</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">password</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'password'</span><span class="op">]</span><br />
+<a class="lnum" href="#41" name="41">0041</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">birthday</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'birthday'</span><span class="op">]</span><br />
+<a class="lnum" href="#42" name="42">0042</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">wage</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'wage'</span><span class="op">]</span><br />
+<a class="lnum" href="#43" name="43">0043</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">department</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'department'</span><span class="op">]</span><br />
+<a class="lnum" href="#44" name="44">0044</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;User&#0160;object&#0160;that&#0160;corresponds&#0160;to&#0160;the&#0160;mapper&#0160;for&#0160;the&#0160;database</span><br />
+<a class="lnum" href="#45" name="45">0045</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">user</span>&#0160;<span class="op">=</span>&#0160;<span class="name">User</span><span class="op">(</span><span class="name">name</span><span class="op">,</span>&#0160;<span class="name">email</span><span class="op">,</span>&#0160;<span class="name">password</span><span class="op">,</span>&#0160;<span class="name">birthday</span><span class="op">,</span>&#0160;<span class="name">int</span><span class="op">(</span><span class="name">wage</span><span class="op">)</span><span class="op">,</span>&#0160;<span class="name">department</span><span class="op">)</span><br />
+<a class="lnum" href="#46" name="46">0046</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Similar&#0160;to&#0160;INSERT&#0160;SQL&#0160;syntax</span><br />
+<a class="lnum" href="#47" name="47">0047</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">Session</span><span class="op">.</span><span class="name">add</span><span class="op">(</span><span class="name">user</span><span class="op">)</span><br />
+<a class="lnum" href="#48" name="48">0048</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Apply&#0160;permanent&#0160;changes</span><br />
+<a class="lnum" href="#49" name="49">0049</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">Session</span><span class="op">.</span><span class="name">commit</span><span class="op">(</span><span class="op">)</span><br />
+<a class="lnum" href="#50" name="50">0050</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Notify&#0160;the&#0160;user&#0160;upon&#0160;success</span><br />
+<a class="lnum" href="#51" name="51">0051</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="keyword">return</span>&#0160;<span class="string">'%s&#0160;was&#0160;successfully&#0160;stored&#0160;in&#0160;the&#0160;database.'</span>&#0160;<span class="op">%</span>&#0160;<span class="op">(</span><span class="name">name</span><span class="op">.</span><span class="name">upper</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><br />
+<a class="lnum" href="#52" name="52">0052</a><br />
+<a class="lnum" href="#53" name="53">0053</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">def</span>&#0160;<span class="name">view</span><span class="op">(</span><span class="name">self</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#54" name="54">0054</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;View&#0160;all&#0160;users</span><br />
+<a class="lnum" href="#55" name="55">0055</a><br />
+<a class="lnum" href="#56" name="56">0056</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Link&#0160;to&#0160;action</span><br />
+<a class="lnum" href="#57" name="57">0057</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">c</span><span class="op">.</span><span class="name">editUserAction</span>&#0160;<span class="op">=</span>&#0160;<span class="name">url</span><span class="op">(</span><span class="name">controller</span><span class="op">=</span><span class="string">'app'</span><span class="op">,</span>&#0160;<span class="name">action</span><span class="op">=</span><span class="string">'edit'</span><span class="op">)</span><br />
+<a class="lnum" href="#58" name="58">0058</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Query&#0160;the&#0160;database&#0160;for&#0160;all&#0160;records&#0160;in&#0160;the&#0160;user&#0160;table</span><br />
+<a class="lnum" href="#59" name="59">0059</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Sort&#0160;alphabetically</span><br />
+<a class="lnum" href="#60" name="60">0060</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;User&#0160;helper&#0160;for&#0160;the&#0160;template</span><br />
+<a class="lnum" href="#61" name="61">0061</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">c</span><span class="op">.</span><span class="name">user</span>&#0160;<span class="op">=</span>&#0160;<span class="op">[</span><span class="name">user</span>&#0160;<span class="keyword">for</span>&#0160;<span class="name">user</span>&#0160;<span class="keyword">in</span>&#0160;<span class="name">self</span><span class="op">.</span><span class="name">query</span><span class="op">.</span><span class="name">order_by</span><span class="op">(</span><span class="name">User</span><span class="op">.</span><span class="name">name</span><span class="op">)</span><span class="op">.</span><span class="name">all</span><span class="op">(</span><span class="op">)</span><span class="op">]</span><br />
+<a class="lnum" href="#62" name="62">0062</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Display&#0160;the&#0160;template</span><br />
+<a class="lnum" href="#63" name="63">0063</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="keyword">return</span>&#0160;<span class="name">render</span><span class="op">(</span><span class="string">'/edit.mako'</span><span class="op">)</span><br />
+<a class="lnum" href="#64" name="64">0064</a><br />
+<a class="lnum" href="#65" name="65">0065</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Validate&#0160;the&#0160;user&#0160;submitted&#0160;form</span><br />
+<a class="lnum" href="#66" name="66">0066</a>&#0160;&#0160;&#0160;&#0160;<span class="op">@</span><span class="name">validate</span><span class="op">(</span><span class="name">schema</span><span class="op">=</span><span class="name">UserForm</span><span class="op">(</span><span class="op">)</span><span class="op">,</span>&#0160;<span class="name">form</span><span class="op">=</span><span class="string">'main'</span><span class="op">)</span><br />
+<a class="lnum" href="#67" name="67">0067</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">def</span>&#0160;<span class="name">edit</span><span class="op">(</span><span class="name">self</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#68" name="68">0068</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Edit&#0160;a&#0160;user</span><br />
+<a class="lnum" href="#69" name="69">0069</a><br />
+<a class="lnum" href="#70" name="70">0070</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Decide&#0160;whether&#0160;to&#0160;update&#0160;or&#0160;remove&#0160;record&#0160;in&#0160;the&#0160;database</span><br />
+<a class="lnum" href="#71" name="71">0071</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="keyword">if</span>&#0160;<span class="op">(</span><span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'edit'</span><span class="op">]</span>&#0160;<span class="op">==</span>&#0160;<span class="string">'e'</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#72" name="72">0072</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Update&#0160;record</span><br />
+<a class="lnum" href="#73" name="73">0073</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Query&#0160;the&#0160;database&#0160;for&#0160;user&#0160;identified&#0160;by&#0160;id</span><br />
+<a class="lnum" href="#74" name="74">0074</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">update</span>&#0160;<span class="op">=</span>&#0160;<span class="name">self</span><span class="op">.</span><span class="name">query</span><span class="op">.</span><span class="name">filter_by</span><span class="op">(</span><span class="name">id</span><span class="op">=</span><span class="name">int</span><span class="op">(</span><span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'id'</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">.</span><span class="name">first</span><span class="op">(</span><span class="op">)</span><br />
+<a class="lnum" href="#75" name="75">0075</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">update</span><span class="op">.</span><span class="name">name</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'name'</span><span class="op">]</span><br />
+<a class="lnum" href="#76" name="76">0076</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">update</span><span class="op">.</span><span class="name">email</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'email'</span><span class="op">]</span><br />
+<a class="lnum" href="#77" name="77">0077</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">update</span><span class="op">.</span><span class="name">password</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'password'</span><span class="op">]</span><br />
+<a class="lnum" href="#78" name="78">0078</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">update</span><span class="op">.</span><span class="name">birthday</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'birthday'</span><span class="op">]</span><br />
+<a class="lnum" href="#79" name="79">0079</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">update</span><span class="op">.</span><span class="name">wage</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'wage'</span><span class="op">]</span><br />
+<a class="lnum" href="#80" name="80">0080</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">update</span><span class="op">.</span><span class="name">department</span>&#0160;<span class="op">=</span>&#0160;<span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'department'</span><span class="op">]</span><br />
+<a class="lnum" href="#81" name="81">0081</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Similar&#0160;to&#0160;UPDATE&#0160;SQL&#0160;syntax</span><br />
+<a class="lnum" href="#82" name="82">0082</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">Session</span><span class="op">.</span><span class="name">add</span><span class="op">(</span><span class="name">update</span><span class="op">)</span><br />
+<a class="lnum" href="#83" name="83">0083</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Apply&#0160;permanent&#0160;changes</span><br />
+<a class="lnum" href="#84" name="84">0084</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">Session</span><span class="op">.</span><span class="name">commit</span><span class="op">(</span><span class="op">)</span><br />
+<a class="lnum" href="#85" name="85">0085</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="keyword">else</span><span class="op">:</span><br />
+<a class="lnum" href="#86" name="86">0086</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Remove&#0160;record</span><br />
+<a class="lnum" href="#87" name="87">0087</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Query&#0160;the&#0160;database&#0160;for&#0160;user&#0160;identified&#0160;by&#0160;id</span><br />
+<a class="lnum" href="#88" name="88">0088</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">delete</span>&#0160;<span class="op">=</span>&#0160;<span class="name">self</span><span class="op">.</span><span class="name">query</span><span class="op">.</span><span class="name">filter_by</span><span class="op">(</span><span class="name">id</span><span class="op">=</span><span class="name">int</span><span class="op">(</span><span class="name">request</span><span class="op">.</span><span class="name">params</span><span class="op">[</span><span class="string">'id'</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">.</span><span class="name">first</span><span class="op">(</span><span class="op">)</span><br />
+<a class="lnum" href="#89" name="89">0089</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Similar&#0160;to&#0160;DELETE&#0160;SQL&#0160;syntax</span><br />
+<a class="lnum" href="#90" name="90">0090</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">Session</span><span class="op">.</span><span class="name">delete</span><span class="op">(</span><span class="name">delete</span><span class="op">)</span><br />
+<a class="lnum" href="#91" name="91">0091</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Apply&#0160;permanent&#0160;changes</span><br />
+<a class="lnum" href="#92" name="92">0092</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">Session</span><span class="op">.</span><span class="name">commit</span><span class="op">(</span><span class="op">)</span><br />
+<a class="lnum" href="#93" name="93">0093</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Regardless&#0160;of&#0160;operation&#0160;failure&#0160;or&#0160;success&#0160;redirect&#0160;the&#0160;user</span><br />
+<a class="lnum" href="#94" name="94">0094</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">redirect</span><span class="op">(</span><span class="name">url</span><span class="op">(</span><span class="name">controller</span><span class="op">=</span><span class="string">'app'</span><span class="op">,</span>&#0160;<span class="name">action</span><span class="op">=</span><span class="string">'view'</span><span class="op">)</span><span class="op">)</span><br />
+<a class="lnum" href="#95" name="95">0095</a><br />
+<a class="lnum" href="#96" name="96">0096</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">def</span>&#0160;<span class="name">submit</span><span class="op">(</span><span class="name">self</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#97" name="97">0097</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="keyword">pass</span></code></div></body></html>

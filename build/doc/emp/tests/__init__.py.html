@@ -1,0 +1,118 @@
+<html><head><title>C:\Users\Georgi\pylons\projects\emp\emp\tests\__init__.py</title>
+        <script type="text/javascript"><!--
+        
+function show_line_range() {
+    var href = document.location.href;
+    if (href.indexOf('?') == -1) {
+        return;
+    }
+    var qs = href.substring(href.indexOf('?')+1);
+    if (qs.indexOf('#') >= 0) {
+        qs = qs.substring(0, qs.indexOf('#'));
+    }
+    var first = qs.match(/f=(\d+)/)[1];
+    var last = qs.match(/l=(\d+)/)[1];
+    if (! first || ! last) {
+        return;
+    }
+    var anchors = document.getElementsByTagName('A');
+    var container = document.createElement('DIV');
+    container.className = 'highlighted';
+    var children = [];
+    var start = null;
+    var parent = null;
+    var highlight = false;
+    for (var i = 0; i < anchors.length; i++) {
+        var el = anchors[i];
+        if (el.getAttribute('name') == first) {
+            start = el.previousSibling;
+            parent = el.parentNode;
+            highlight = true;
+        }
+        if (el.getAttribute('name') == last) {
+            break;
+        }
+        if (highlight) {
+            children[children.length] = el;
+            el = el.nextSibling;
+            while (el && el.tagName != 'A') {
+                children[children.length] = el;
+                el = el.nextSibling;
+            }
+        }
+    }
+    for (i=0; i<children.length; i++) {
+        container.appendChild(children[i]);
+    }
+    if (start) {
+        start.parentNode.insertBefore(container, start.nextSibling);
+    } else {
+        parent.insertBefore(container, parent.childNodes[0]);
+    }
+}
+
+        // --></script>
+        <style>
+        div.python {
+          color: #333
+        }
+        div.python a.lnum {
+          color: #555;
+          background-color: #eee;
+          border-right: 1px solid #999;
+          padding-right: 2px;
+          margin-right: 4px;
+        }
+        div.python span.comment { color: #933 }
+        div.python span.keyword { color: #a3e; font-weight: bold  }
+        div.python span.op { color: #c96 }
+        div.python span.string { color: #6a6 }
+        div.python span.name { }
+        div.python span.text { color: #333 }
+        div.highlighted { background-color: #ff9; border: 1px solid #009 }
+        </style></head><body onload="show_line_range()"><div class="python"><code><a class="lnum" href="#1" name="1">0001</a><span class="string">"""Pylons&#0160;application&#0160;test&#0160;package</span><br />
+<a class="lnum" href="#2" name="2">0002</a><span class="string"></span><br />
+<a class="lnum" href="#3" name="3">0003</a><span class="string">This&#0160;package&#0160;assumes&#0160;the&#0160;Pylons&#0160;environment&#0160;is&#0160;already&#0160;loaded,&#0160;such&#0160;as</span><br />
+<a class="lnum" href="#4" name="4">0004</a><span class="string">when&#0160;this&#0160;script&#0160;is&#0160;imported&#0160;from&#0160;the&#0160;`nosetests&#0160;--with-pylons=test.ini`</span><br />
+<a class="lnum" href="#5" name="5">0005</a><span class="string">command.</span><br />
+<a class="lnum" href="#6" name="6">0006</a><span class="string"></span><br />
+<a class="lnum" href="#7" name="7">0007</a><span class="string">This&#0160;module&#0160;initializes&#0160;the&#0160;application&#0160;via&#0160;``websetup``&#0160;(`paster</span><br />
+<a class="lnum" href="#8" name="8">0008</a><span class="string">setup-app`)&#0160;and&#0160;provides&#0160;the&#0160;base&#0160;testing&#0160;objects.</span><br />
+<a class="lnum" href="#9" name="9">0009</a><span class="string">"""</span><br />
+<a class="lnum" href="#10" name="10">0010</a><span class="keyword">from</span>&#0160;<span class="name">unittest</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">TestCase</span><br />
+<a class="lnum" href="#11" name="11">0011</a><span class="keyword">import</span>&#0160;<span class="name">os</span><br />
+<a class="lnum" href="#12" name="12">0012</a><span class="keyword">import</span>&#0160;<span class="name">sys</span><br />
+<a class="lnum" href="#13" name="13">0013</a><br />
+<a class="lnum" href="#14" name="14">0014</a><span class="keyword">import</span>&#0160;<span class="name">pylons</span><br />
+<a class="lnum" href="#15" name="15">0015</a><span class="keyword">from</span>&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">i18n</span><span class="op">.</span><span class="name">translation</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">_get_translator</span><br />
+<a class="lnum" href="#16" name="16">0016</a><span class="keyword">from</span>&#0160;<span class="name">paste</span><span class="op">.</span><span class="name">deploy</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">loadapp</span><br />
+<a class="lnum" href="#17" name="17">0017</a><span class="keyword">from</span>&#0160;<span class="name">pylons</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">url</span><br />
+<a class="lnum" href="#18" name="18">0018</a><span class="keyword">from</span>&#0160;<span class="name">paste</span><span class="op">.</span><span class="name">script</span><span class="op">.</span><span class="name">appinstall</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">SetupCommand</span><br />
+<a class="lnum" href="#19" name="19">0019</a><span class="keyword">from</span>&#0160;<span class="name">routes</span><span class="op">.</span><span class="name">util</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">URLGenerator</span><br />
+<a class="lnum" href="#20" name="20">0020</a><span class="keyword">from</span>&#0160;<span class="name">webtest</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">TestApp</span><br />
+<a class="lnum" href="#21" name="21">0021</a><br />
+<a class="lnum" href="#22" name="22">0022</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">config</span><span class="op">.</span><span class="name">environment</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">load_environment</span><br />
+<a class="lnum" href="#23" name="23">0023</a><br />
+<a class="lnum" href="#24" name="24">0024</a><span class="name">__all__</span>&#0160;<span class="op">=</span>&#0160;<span class="op">[</span><span class="string">'environ'</span><span class="op">,</span>&#0160;<span class="string">'url'</span><span class="op">,</span>&#0160;<span class="string">'TestController'</span><span class="op">]</span><br />
+<a class="lnum" href="#25" name="25">0025</a><br />
+<a class="lnum" href="#26" name="26">0026</a><span class="name">environ</span>&#0160;<span class="op">=</span>&#0160;<span class="op">{</span><span class="op">}</span><br />
+<a class="lnum" href="#27" name="27">0027</a><span class="name">here_dir</span>&#0160;<span class="op">=</span>&#0160;<span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">dirname</span><span class="op">(</span><span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">abspath</span><span class="op">(</span><span class="name">__file__</span><span class="op">)</span><span class="op">)</span><br />
+<a class="lnum" href="#28" name="28">0028</a><span class="name">conf_dir</span>&#0160;<span class="op">=</span>&#0160;<span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">dirname</span><span class="op">(</span><span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">dirname</span><span class="op">(</span><span class="name">here_dir</span><span class="op">)</span><span class="op">)</span><br />
+<a class="lnum" href="#29" name="29">0029</a><br />
+<a class="lnum" href="#30" name="30">0030</a><span class="name">sys</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">insert</span><span class="op">(</span><span class="number">0</span><span class="op">,</span>&#0160;<span class="name">conf_dir</span><span class="op">)</span><br />
+<a class="lnum" href="#31" name="31">0031</a><br />
+<a class="lnum" href="#32" name="32">0032</a><br />
+<a class="lnum" href="#33" name="33">0033</a><span class="keyword">class</span>&#0160;<span class="name">TestController</span><span class="op">(</span><span class="name">TestCase</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#34" name="34">0034</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">def</span>&#0160;<span class="name">__init__</span><span class="op">(</span><span class="name">self</span><span class="op">,</span>&#0160;<span class="op">*</span><span class="name">args</span><span class="op">,</span>&#0160;<span class="op">**</span><span class="name">kwargs</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#35" name="35">0035</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">wsgiapp</span>&#0160;<span class="op">=</span>&#0160;<span class="name">loadapp</span><span class="op">(</span><span class="string">'config:test.ini'</span><span class="op">,</span>&#0160;<span class="name">relative_to</span><span class="op">=</span><span class="name">conf_dir</span><span class="op">)</span><br />
+<a class="lnum" href="#36" name="36">0036</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">config</span>&#0160;<span class="op">=</span>&#0160;<span class="name">wsgiapp</span><span class="op">.</span><span class="name">config</span><br />
+<a class="lnum" href="#37" name="37">0037</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">app_globals</span><span class="op">.</span><span class="name">_push_object</span><span class="op">(</span><span class="name">config</span><span class="op">[</span><span class="string">'pylons.app_globals'</span><span class="op">]</span><span class="op">)</span><br />
+<a class="lnum" href="#38" name="38">0038</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">config</span><span class="op">.</span><span class="name">_push_object</span><span class="op">(</span><span class="name">config</span><span class="op">)</span><br />
+<a class="lnum" href="#39" name="39">0039</a><br />
+<a class="lnum" href="#40" name="40">0040</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Initialize&#0160;a&#0160;translator&#0160;for&#0160;tests&#0160;that&#0160;utilize&#0160;i18n</span><br />
+<a class="lnum" href="#41" name="41">0041</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">translator</span>&#0160;<span class="op">=</span>&#0160;<span class="name">_get_translator</span><span class="op">(</span><span class="name">pylons</span><span class="op">.</span><span class="name">config</span><span class="op">.</span><span class="name">get</span><span class="op">(</span><span class="string">'lang'</span><span class="op">)</span><span class="op">)</span><br />
+<a class="lnum" href="#42" name="42">0042</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">translator</span><span class="op">.</span><span class="name">_push_object</span><span class="op">(</span><span class="name">translator</span><span class="op">)</span><br />
+<a class="lnum" href="#43" name="43">0043</a><br />
+<a class="lnum" href="#44" name="44">0044</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">url</span><span class="op">.</span><span class="name">_push_object</span><span class="op">(</span><span class="name">URLGenerator</span><span class="op">(</span><span class="name">config</span><span class="op">[</span><span class="string">'routes.map'</span><span class="op">]</span><span class="op">,</span>&#0160;<span class="name">environ</span><span class="op">)</span><span class="op">)</span><br />
+<a class="lnum" href="#45" name="45">0045</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">self</span><span class="op">.</span><span class="name">app</span>&#0160;<span class="op">=</span>&#0160;<span class="name">TestApp</span><span class="op">(</span><span class="name">wsgiapp</span><span class="op">)</span><br />
+<a class="lnum" href="#46" name="46">0046</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">TestCase</span><span class="op">.</span><span class="name">__init__</span><span class="op">(</span><span class="name">self</span><span class="op">,</span>&#0160;<span class="op">*</span><span class="name">args</span><span class="op">,</span>&#0160;<span class="op">**</span><span class="name">kwargs</span><span class="op">)</span></code></div></body></html>

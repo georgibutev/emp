@@ -1,0 +1,92 @@
+<html><head><title>C:\Users\Georgi\pylons\projects\emp\emp\model\form.py</title>
+        <script type="text/javascript"><!--
+        
+function show_line_range() {
+    var href = document.location.href;
+    if (href.indexOf('?') == -1) {
+        return;
+    }
+    var qs = href.substring(href.indexOf('?')+1);
+    if (qs.indexOf('#') >= 0) {
+        qs = qs.substring(0, qs.indexOf('#'));
+    }
+    var first = qs.match(/f=(\d+)/)[1];
+    var last = qs.match(/l=(\d+)/)[1];
+    if (! first || ! last) {
+        return;
+    }
+    var anchors = document.getElementsByTagName('A');
+    var container = document.createElement('DIV');
+    container.className = 'highlighted';
+    var children = [];
+    var start = null;
+    var parent = null;
+    var highlight = false;
+    for (var i = 0; i < anchors.length; i++) {
+        var el = anchors[i];
+        if (el.getAttribute('name') == first) {
+            start = el.previousSibling;
+            parent = el.parentNode;
+            highlight = true;
+        }
+        if (el.getAttribute('name') == last) {
+            break;
+        }
+        if (highlight) {
+            children[children.length] = el;
+            el = el.nextSibling;
+            while (el && el.tagName != 'A') {
+                children[children.length] = el;
+                el = el.nextSibling;
+            }
+        }
+    }
+    for (i=0; i<children.length; i++) {
+        container.appendChild(children[i]);
+    }
+    if (start) {
+        start.parentNode.insertBefore(container, start.nextSibling);
+    } else {
+        parent.insertBefore(container, parent.childNodes[0]);
+    }
+}
+
+        // --></script>
+        <style>
+        div.python {
+          color: #333
+        }
+        div.python a.lnum {
+          color: #555;
+          background-color: #eee;
+          border-right: 1px solid #999;
+          padding-right: 2px;
+          margin-right: 4px;
+        }
+        div.python span.comment { color: #933 }
+        div.python span.keyword { color: #a3e; font-weight: bold  }
+        div.python span.op { color: #c96 }
+        div.python span.string { color: #6a6 }
+        div.python span.name { }
+        div.python span.text { color: #333 }
+        div.highlighted { background-color: #ff9; border: 1px solid #009 }
+        </style></head><body onload="show_line_range()"><div class="python"><code><a class="lnum" href="#1" name="1">0001</a><span class="comment">#&#0160;Used&#0160;to&#0160;validate&#0160;the&#0160;user&#0160;submitted&#0160;form</span><br />
+<a class="lnum" href="#2" name="2">0002</a><span class="comment">#&#0160;The&#0160;schema&#0160;is&#0160;required&#0160;in&#0160;order&#0160;to&#0160;determine&#0160;the&#0160;requirements</span><br />
+<a class="lnum" href="#3" name="3">0003</a><br />
+<a class="lnum" href="#4" name="4">0004</a><span class="keyword">import</span>&#0160;<span class="name">formencode</span><br />
+<a class="lnum" href="#5" name="5">0005</a><br />
+<a class="lnum" href="#6" name="6">0006</a><span class="keyword">class</span>&#0160;<span class="name">UserForm</span><span class="op">(</span><span class="name">formencode</span><span class="op">.</span><span class="name">Schema</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#7" name="7">0007</a><br />
+<a class="lnum" href="#8" name="8">0008</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Other&#0160;fields&#0160;that&#0160;don't&#0160;require&#0160;validation,&#0160;such&#0160;as&#0160;select&#0160;option</span><br />
+<a class="lnum" href="#9" name="9">0009</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">allow_extra_fields</span>&#0160;<span class="op">=</span>&#0160;<span class="name">True</span><br />
+<a class="lnum" href="#10" name="10">0010</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">filter_extra_fields</span>&#0160;<span class="op">=</span>&#0160;<span class="name">True</span><br />
+<a class="lnum" href="#11" name="11">0011</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;The&#0160;username&#0160;field&#0160;should&#0160;not&#0160;be&#0160;empty</span><br />
+<a class="lnum" href="#12" name="12">0012</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">name</span>&#0160;<span class="op">=</span>&#0160;<span class="name">formencode</span><span class="op">.</span><span class="name">validators</span><span class="op">.</span><span class="name">NotEmpty</span><span class="op">(</span><span class="op">)</span><br />
+<a class="lnum" href="#13" name="13">0013</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;The&#0160;email&#0160;field&#0160;should&#0160;not&#0160;be&#0160;empty&#0160;and&#0160;should&#0160;contain&#0160;@&#0160;sign</span><br />
+<a class="lnum" href="#14" name="14">0014</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">email</span>&#0160;<span class="op">=</span>&#0160;<span class="name">formencode</span><span class="op">.</span><span class="name">validators</span><span class="op">.</span><span class="name">Email</span><span class="op">(</span><span class="op">)</span><br />
+<a class="lnum" href="#15" name="15">0015</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;The&#0160;password&#0160;length&#0160;should&#0160;be&#0160;at&#0160;least&#0160;6&#0160;chars&#0160;long</span><br />
+<a class="lnum" href="#16" name="16">0016</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">password</span>&#0160;<span class="op">=</span>&#0160;<span class="name">formencode</span><span class="op">.</span><span class="name">validators</span><span class="op">.</span><span class="name">MinLength</span><span class="op">(</span><span class="number">6</span><span class="op">)</span><br />
+<a class="lnum" href="#17" name="17">0017</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;The&#0160;birthday&#0160;field&#0160;should&#0160;not&#0160;be&#0160;empty</span><br />
+<a class="lnum" href="#18" name="18">0018</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">birthday</span>&#0160;<span class="op">=</span>&#0160;<span class="name">formencode</span><span class="op">.</span><span class="name">validators</span><span class="op">.</span><span class="name">NotEmpty</span><span class="op">(</span><span class="op">)</span><br />
+<a class="lnum" href="#19" name="19">0019</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;The&#0160;wage&#0160;field&#0160;should&#0160;numeric</span><br />
+<a class="lnum" href="#20" name="20">0020</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">wage</span>&#0160;<span class="op">=</span>&#0160;<span class="name">formencode</span><span class="op">.</span><span class="name">validators</span><span class="op">.</span><span class="name">Int</span><span class="op">(</span><span class="op">)</span></code></div></body></html>

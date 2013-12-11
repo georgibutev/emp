@@ -1,0 +1,126 @@
+<html><head><title>C:\Users\Georgi\pylons\projects\emp\emp\config\environment.py</title>
+        <script type="text/javascript"><!--
+        
+function show_line_range() {
+    var href = document.location.href;
+    if (href.indexOf('?') == -1) {
+        return;
+    }
+    var qs = href.substring(href.indexOf('?')+1);
+    if (qs.indexOf('#') >= 0) {
+        qs = qs.substring(0, qs.indexOf('#'));
+    }
+    var first = qs.match(/f=(\d+)/)[1];
+    var last = qs.match(/l=(\d+)/)[1];
+    if (! first || ! last) {
+        return;
+    }
+    var anchors = document.getElementsByTagName('A');
+    var container = document.createElement('DIV');
+    container.className = 'highlighted';
+    var children = [];
+    var start = null;
+    var parent = null;
+    var highlight = false;
+    for (var i = 0; i < anchors.length; i++) {
+        var el = anchors[i];
+        if (el.getAttribute('name') == first) {
+            start = el.previousSibling;
+            parent = el.parentNode;
+            highlight = true;
+        }
+        if (el.getAttribute('name') == last) {
+            break;
+        }
+        if (highlight) {
+            children[children.length] = el;
+            el = el.nextSibling;
+            while (el && el.tagName != 'A') {
+                children[children.length] = el;
+                el = el.nextSibling;
+            }
+        }
+    }
+    for (i=0; i<children.length; i++) {
+        container.appendChild(children[i]);
+    }
+    if (start) {
+        start.parentNode.insertBefore(container, start.nextSibling);
+    } else {
+        parent.insertBefore(container, parent.childNodes[0]);
+    }
+}
+
+        // --></script>
+        <style>
+        div.python {
+          color: #333
+        }
+        div.python a.lnum {
+          color: #555;
+          background-color: #eee;
+          border-right: 1px solid #999;
+          padding-right: 2px;
+          margin-right: 4px;
+        }
+        div.python span.comment { color: #933 }
+        div.python span.keyword { color: #a3e; font-weight: bold  }
+        div.python span.op { color: #c96 }
+        div.python span.string { color: #6a6 }
+        div.python span.name { }
+        div.python span.text { color: #333 }
+        div.highlighted { background-color: #ff9; border: 1px solid #009 }
+        </style></head><body onload="show_line_range()"><div class="python"><code><a class="lnum" href="#1" name="1">0001</a><span class="string">"""Pylons&#0160;environment&#0160;configuration"""</span><br />
+<a class="lnum" href="#2" name="2">0002</a><span class="keyword">import</span>&#0160;<span class="name">os</span><br />
+<a class="lnum" href="#3" name="3">0003</a><br />
+<a class="lnum" href="#4" name="4">0004</a><span class="keyword">from</span>&#0160;<span class="name">mako</span><span class="op">.</span><span class="name">lookup</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">TemplateLookup</span><br />
+<a class="lnum" href="#5" name="5">0005</a><span class="keyword">from</span>&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">configuration</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">PylonsConfig</span><br />
+<a class="lnum" href="#6" name="6">0006</a><span class="keyword">from</span>&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">error</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">handle_mako_error</span><br />
+<a class="lnum" href="#7" name="7">0007</a><span class="keyword">from</span>&#0160;<span class="name">sqlalchemy</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">engine_from_config</span><br />
+<a class="lnum" href="#8" name="8">0008</a><br />
+<a class="lnum" href="#9" name="9">0009</a><span class="keyword">import</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">lib</span><span class="op">.</span><span class="name">app_globals</span>&#0160;<span class="keyword">as</span>&#0160;<span class="name">app_globals</span><br />
+<a class="lnum" href="#10" name="10">0010</a><span class="keyword">import</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">lib</span><span class="op">.</span><span class="name">helpers</span><br />
+<a class="lnum" href="#11" name="11">0011</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">config</span><span class="op">.</span><span class="name">routing</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">make_map</span><br />
+<a class="lnum" href="#12" name="12">0012</a><span class="keyword">from</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">model</span>&#0160;<span class="keyword">import</span>&#0160;<span class="name">init_model</span><br />
+<a class="lnum" href="#13" name="13">0013</a><br />
+<a class="lnum" href="#14" name="14">0014</a><span class="keyword">def</span>&#0160;<span class="name">load_environment</span><span class="op">(</span><span class="name">global_conf</span><span class="op">,</span>&#0160;<span class="name">app_conf</span><span class="op">)</span><span class="op">:</span><br />
+<a class="lnum" href="#15" name="15">0015</a>&#0160;&#0160;&#0160;&#0160;<span class="string">"""Configure&#0160;the&#0160;Pylons&#0160;environment&#0160;via&#0160;the&#0160;``pylons.config``</span><br />
+<a class="lnum" href="#16" name="16">0016</a><span class="string">&#0160;&#0160;&#0160;&#0160;object</span><br />
+<a class="lnum" href="#17" name="17">0017</a><span class="string">&#0160;&#0160;&#0160;&#0160;"""</span><br />
+<a class="lnum" href="#18" name="18">0018</a>&#0160;&#0160;&#0160;&#0160;<span class="name">config</span>&#0160;<span class="op">=</span>&#0160;<span class="name">PylonsConfig</span><span class="op">(</span><span class="op">)</span><br />
+<a class="lnum" href="#19" name="19">0019</a><br />
+<a class="lnum" href="#20" name="20">0020</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Pylons&#0160;paths</span><br />
+<a class="lnum" href="#21" name="21">0021</a>&#0160;&#0160;&#0160;&#0160;<span class="name">root</span>&#0160;<span class="op">=</span>&#0160;<span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">dirname</span><span class="op">(</span><span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">dirname</span><span class="op">(</span><span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">abspath</span><span class="op">(</span><span class="name">__file__</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><br />
+<a class="lnum" href="#22" name="22">0022</a>&#0160;&#0160;&#0160;&#0160;<span class="name">paths</span>&#0160;<span class="op">=</span>&#0160;<span class="name">dict</span><span class="op">(</span><span class="name">root</span><span class="op">=</span><span class="name">root</span><span class="op">,</span><br />
+<a class="lnum" href="#23" name="23">0023</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">controllers</span><span class="op">=</span><span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">join</span><span class="op">(</span><span class="name">root</span><span class="op">,</span>&#0160;<span class="string">'controllers'</span><span class="op">)</span><span class="op">,</span><br />
+<a class="lnum" href="#24" name="24">0024</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">static_files</span><span class="op">=</span><span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">join</span><span class="op">(</span><span class="name">root</span><span class="op">,</span>&#0160;<span class="string">'public'</span><span class="op">)</span><span class="op">,</span><br />
+<a class="lnum" href="#25" name="25">0025</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">templates</span><span class="op">=</span><span class="op">[</span><span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">join</span><span class="op">(</span><span class="name">root</span><span class="op">,</span>&#0160;<span class="string">'templates'</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><br />
+<a class="lnum" href="#26" name="26">0026</a><br />
+<a class="lnum" href="#27" name="27">0027</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Initialize&#0160;config&#0160;with&#0160;the&#0160;basic&#0160;options</span><br />
+<a class="lnum" href="#28" name="28">0028</a>&#0160;&#0160;&#0160;&#0160;<span class="name">config</span><span class="op">.</span><span class="name">init_app</span><span class="op">(</span><span class="name">global_conf</span><span class="op">,</span>&#0160;<span class="name">app_conf</span><span class="op">,</span>&#0160;<span class="name">package</span><span class="op">=</span><span class="string">'emp'</span><span class="op">,</span>&#0160;<span class="name">paths</span><span class="op">=</span><span class="name">paths</span><span class="op">)</span><br />
+<a class="lnum" href="#29" name="29">0029</a><br />
+<a class="lnum" href="#30" name="30">0030</a>&#0160;&#0160;&#0160;&#0160;<span class="name">config</span><span class="op">[</span><span class="string">'routes.map'</span><span class="op">]</span>&#0160;<span class="op">=</span>&#0160;<span class="name">make_map</span><span class="op">(</span><span class="name">config</span><span class="op">)</span><br />
+<a class="lnum" href="#31" name="31">0031</a>&#0160;&#0160;&#0160;&#0160;<span class="name">config</span><span class="op">[</span><span class="string">'pylons.app_globals'</span><span class="op">]</span>&#0160;<span class="op">=</span>&#0160;<span class="name">app_globals</span><span class="op">.</span><span class="name">Globals</span><span class="op">(</span><span class="name">config</span><span class="op">)</span><br />
+<a class="lnum" href="#32" name="32">0032</a>&#0160;&#0160;&#0160;&#0160;<span class="name">config</span><span class="op">[</span><span class="string">'pylons.h'</span><span class="op">]</span>&#0160;<span class="op">=</span>&#0160;<span class="name">emp</span><span class="op">.</span><span class="name">lib</span><span class="op">.</span><span class="name">helpers</span><br />
+<a class="lnum" href="#33" name="33">0033</a><br />
+<a class="lnum" href="#34" name="34">0034</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Setup&#0160;cache&#0160;object&#0160;as&#0160;early&#0160;as&#0160;possible</span><br />
+<a class="lnum" href="#35" name="35">0035</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">import</span>&#0160;<span class="name">pylons</span><br />
+<a class="lnum" href="#36" name="36">0036</a>&#0160;&#0160;&#0160;&#0160;<span class="name">pylons</span><span class="op">.</span><span class="name">cache</span><span class="op">.</span><span class="name">_push_object</span><span class="op">(</span><span class="name">config</span><span class="op">[</span><span class="string">'pylons.app_globals'</span><span class="op">]</span><span class="op">.</span><span class="name">cache</span><span class="op">)</span><br />
+<a class="lnum" href="#37" name="37">0037</a><br />
+<a class="lnum" href="#38" name="38">0038</a><br />
+<a class="lnum" href="#39" name="39">0039</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Create&#0160;the&#0160;Mako&#0160;TemplateLookup,&#0160;with&#0160;the&#0160;default&#0160;auto-escaping</span><br />
+<a class="lnum" href="#40" name="40">0040</a>&#0160;&#0160;&#0160;&#0160;<span class="name">config</span><span class="op">[</span><span class="string">'pylons.app_globals'</span><span class="op">]</span><span class="op">.</span><span class="name">mako_lookup</span>&#0160;<span class="op">=</span>&#0160;<span class="name">TemplateLookup</span><span class="op">(</span><br />
+<a class="lnum" href="#41" name="41">0041</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">directories</span><span class="op">=</span><span class="name">paths</span><span class="op">[</span><span class="string">'templates'</span><span class="op">]</span><span class="op">,</span><br />
+<a class="lnum" href="#42" name="42">0042</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">error_handler</span><span class="op">=</span><span class="name">handle_mako_error</span><span class="op">,</span><br />
+<a class="lnum" href="#43" name="43">0043</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">module_directory</span><span class="op">=</span><span class="name">os</span><span class="op">.</span><span class="name">path</span><span class="op">.</span><span class="name">join</span><span class="op">(</span><span class="name">app_conf</span><span class="op">[</span><span class="string">'cache_dir'</span><span class="op">]</span><span class="op">,</span>&#0160;<span class="string">'templates'</span><span class="op">)</span><span class="op">,</span><br />
+<a class="lnum" href="#44" name="44">0044</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">input_encoding</span><span class="op">=</span><span class="string">'utf-8'</span><span class="op">,</span>&#0160;<span class="name">default_filters</span><span class="op">=</span><span class="op">[</span><span class="string">'escape'</span><span class="op">]</span><span class="op">,</span><br />
+<a class="lnum" href="#45" name="45">0045</a>&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;&#0160;<span class="name">imports</span><span class="op">=</span><span class="op">[</span><span class="string">'from&#0160;markupsafe&#0160;import&#0160;escape'</span><span class="op">]</span><span class="op">)</span><br />
+<a class="lnum" href="#46" name="46">0046</a><br />
+<a class="lnum" href="#47" name="47">0047</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;Setup&#0160;the&#0160;SQLAlchemy&#0160;database&#0160;engine</span><br />
+<a class="lnum" href="#48" name="48">0048</a>&#0160;&#0160;&#0160;&#0160;<span class="name">engine</span>&#0160;<span class="op">=</span>&#0160;<span class="name">engine_from_config</span><span class="op">(</span><span class="name">config</span><span class="op">,</span>&#0160;<span class="string">'sqlalchemy.'</span><span class="op">)</span><br />
+<a class="lnum" href="#49" name="49">0049</a>&#0160;&#0160;&#0160;&#0160;<span class="name">init_model</span><span class="op">(</span><span class="name">engine</span><span class="op">)</span><br />
+<a class="lnum" href="#50" name="50">0050</a><br />
+<a class="lnum" href="#51" name="51">0051</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;CONFIGURATION&#0160;OPTIONS&#0160;HERE&#0160;(note:&#0160;all&#0160;config&#0160;options&#0160;will&#0160;override</span><br />
+<a class="lnum" href="#52" name="52">0052</a>&#0160;&#0160;&#0160;&#0160;<span class="comment">#&#0160;any&#0160;Pylons&#0160;config&#0160;options)</span><br />
+<a class="lnum" href="#53" name="53">0053</a><br />
+<a class="lnum" href="#54" name="54">0054</a>&#0160;&#0160;&#0160;&#0160;<span class="keyword">return</span>&#0160;<span class="name">config</span></code></div></body></html>
